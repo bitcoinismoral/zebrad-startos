@@ -16,12 +16,12 @@ export const manifest = setupManifest({
   volumes: ['startos', 'zebra', 'lightwalletd'],
   images: {
     zebra: {
-      source: { dockerTag: 'zfnd/zebra:6.4.2' },
+      source: { dockerTag: 'zfnd/zebra:7.0.0' },
       arch: ['x86_64'],
     },
     // electriccoinco/lightwalletd publishes amd64 only.
     lightwalletd: {
-      source: { dockerTag: 'electriccoinco/lightwalletd:v0.5.4' },
+      source: { dockerTag: 'electriccoinco/lightwalletd:v0.6.1' },
       arch: ['x86_64'],
     },
   },

@@ -44,7 +44,7 @@ The RPC interface does not appear until you create its credentials:
 1. Run **Generate RPC Password**. It shows a username (`zebra`) and a password; save the password somewhere safe.
 2. The **RPC** interface now appears on the **Dashboard**. Point your tool at that address and log in with HTTP basic auth using those credentials.
 
-Running **Generate RPC Password** again replaces the password; tools using the old one stop working until you update them. Other services on your server can reach Zebra's RPC on port 8232 without a password.
+Running **Generate RPC Password** again replaces the password; tools using the old one stop working until you update them. Once a password exists, every RPC client, including other services on your server, must log in with it.
 
 ### Settings
 

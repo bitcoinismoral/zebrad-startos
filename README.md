@@ -85,7 +85,7 @@ Three interfaces; two are conditional.
 | `rpc`          | api   | 8232 | JSON-RPC over HTTP, HTTPS off-box          | an RPC password has been set    |
 
 - **lightwalletd**: raw TCP binding with `addSsl` (`alpn: ['h2']`, no auth, no X-Forwarded headers). On the TLS port StartOS terminates TLS (device certificate, or Let's Encrypt on a public domain), answers ALPN `h2` itself and pipes bytes to lightwalletd's plaintext h2c listener (`--no-tls-very-insecure`). The plain port (`secure: { ssl: false }`) is published as `grpc://host:9068` and is what `.onion` addresses carry. Zodl compatibility (from its source): Android accepts `host:port` (TLS, system CAs only — user-installed CAs are not trusted), `grpc://host:port` (plaintext) and `.onion` (plaintext over its Tor); iOS accepts `host:port` (TLS via the platform trust store) only. Zodl's Tor setting routes server-info and tip queries through Tor, so a LAN address fails with gRPC status 14 while it is on.
-- **rpc**: off-box access goes through the StartOS proxy with HTTP basic auth (`zebra` / the stored password). zebrad's own cookie auth is disabled, because the cookie rotates on every start and lightwalletd reads its credentials once at launch. Consequently anything on the server itself (other services, the bridge) can call zebrad's RPC on 8232 without credentials — including `stop` and `addnode`.
+- **rpc**: off-box access goes through the StartOS proxy with HTTP basic auth (`zebra` / the stored password). zebrad's own cookie auth is disabled, because the cookie rotates on every start and lightwalletd reads its credentials once at launch. Since StartOS 0.4.1 the proxy enforces that auth on plaintext connections too, so other services on the box also need the credentials. Before a password exists the binding is absent and nothing outside the service reaches 8232. Package-internal callers (lightwalletd, health checks, actions) use loopback and are unaffected.
 - zebrad's health endpoint (8080) and lightwalletd's HTTP/metrics listener (9068) are loopback-only and not bound.
 
 ## Installation and First-Run Flow
@@ -129,7 +129,7 @@ Volumes are copied wholesale (`ofVolumes('startos', 'zebra', 'lightwalletd')`) w
 
 1. Mainnet only; `network.network` is enforced.
 2. x86_64 only, because the lightwalletd image is published for amd64 only.
-3. zebrad's cookie authentication is off; off-box RPC is protected by proxy basic auth instead, and on-box clients are unauthenticated.
+3. zebrad's cookie authentication is off; RPC from outside the service is protected by StartOS proxy basic auth instead (on plaintext connections too, since StartOS 0.4.1).
 4. The chain state is not backed up.
 5. Zebra's built-in lightwalletd-compatible gRPC server, Prometheus metrics, OpenTelemetry, Elasticsearch, the internal miner and the zcashd-compat sidecar are not exposed.
 6. Comments in `zebrad.toml` are not preserved across writes.

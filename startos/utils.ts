@@ -35,7 +35,7 @@ export const lwdInterfaceId = 'lightwalletd'
 export const rpcUsername = 'zebra'
 
 /**
- * Zebra 6.4.2's built-in Mainnet DNS seeders (zebra-network/src/config.rs).
+ * Zebra 7.0.0's built-in Mainnet DNS seeders (zebra-network/src/config.rs).
  * `initial_mainnet_peers` replaces this list wholesale, so user-added peers
  * are written alongside it, never instead of it.
  */
@@ -44,6 +44,7 @@ export const defaultMainnetPeers = [
   'dnsseed.z.cash:8233',
   'mainnet.seeder.shieldedinfra.net:8233',
   'mainnet.seeder.zfnd.org:8233',
+  'seeder.zec.rocks:8233',
 ]
 
 // ── JSON-RPC ───────────────────────────────────────────────────────────

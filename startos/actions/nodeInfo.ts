@@ -16,6 +16,7 @@ const single = (
   copyable,
   masked: false,
   qr: false,
+  launchable: false,
 })
 
 export const nodeInfo = sdk.Action.withoutInput(
