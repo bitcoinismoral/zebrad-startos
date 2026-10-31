@@ -5,7 +5,7 @@ export const manifest = setupManifest({
   id: 'zebrad',
   title: 'Zcash',
   license: 'MIT',
-  packageRepo: 'https://github.com/zephanw/zebrad-startos',
+  packageRepo: 'https://github.com/bitcoinismoral/zebrad-startos',
   upstreamRepo: 'https://github.com/ZcashFoundation/zebra',
   marketingUrl: 'https://zfnd.org/zebra/',
   donationUrl: null,
