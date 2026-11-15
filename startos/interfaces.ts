@@ -48,7 +48,7 @@ export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
 
   // ── lightwalletd (gRPC for light wallets) ──
   // lightwalletd serves plaintext gRPC (h2c). StartOS terminates TLS on the
-  // SSL port and, with no auth or X-Forwarded headers, pipes the raw bytes
+  // SSL port and, with no HTTP proxy (raw TCP defaults to `proxy: null`), pipes the raw bytes
   // through (start-core net/vhost.rs) — so it can answer ALPN `h2` itself,
   // which gRPC clients require and http-protocol termination (http/1.1)
   // would not give. The plain port serves wallets that speak plaintext gRPC:
@@ -66,9 +66,7 @@ export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
         secure: { ssl: false },
         addSsl: {
           alpn: ['h2'],
-          auth: null,
           preferredExternalPort: lwdGrpcPort,
-          addXForwardedHeaders: false,
         },
       },
     )
@@ -102,7 +100,9 @@ export const setInterfaces = sdk.setupInterfaces(async ({ effects }) => {
       {
         protocol: 'http',
         preferredExternalPort: rpcPort,
-        addSsl: {
+        // Enforced by the StartOS proxy on every enabled address, TLS and
+        // plaintext alike (SDK 4: auth lives under `proxy`, not `addSsl`).
+        proxy: {
           auth: {
             type: 'basic',
             credentials: [{ username: rpcUsername, password: rpcPassword }],
